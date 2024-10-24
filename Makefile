@@ -4,7 +4,8 @@ CPPFLAGS = -Isrc
 
 BIN = src/vm
 
-OBJ = ${BIN}.o
+OBJ = ${BIN}.o \
+      src/machine.o
 
 all: release
 
@@ -20,4 +21,4 @@ ${BIN}: ${OBJ}
 clean:
 	${RM} ${BIN} ${OBJ}
 
-.PHONY: all release debug
+.PHONY: all release debug clean

@@ -1,7 +1,9 @@
 #include <stdio.h>
 
+#include "mem.h"
+
 int main(void)
 {
-    printf("Hello world !\n");
+    printf("Max memory of VM == %u\n", MAX_MEM);
     return 0;
 }
