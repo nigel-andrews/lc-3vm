@@ -12,7 +12,7 @@ OBJ = src/machine.o     \
       src/opcode.o
 
 TEST_OBJ = tests/unit/test_helpers.o
-TEST_BIN = test
+TEST_BIN = tests/test
 
 all: debug
 

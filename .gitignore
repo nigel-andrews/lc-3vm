@@ -52,3 +52,6 @@ Mkfile.old
 dkms.conf
 src/vm
 .env
+.cache
+compile_commands.json
+tests/test
