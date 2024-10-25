@@ -1,10 +1,8 @@
 #include <err.h>
-#include <stdio.h>
 
 #include "error.h"
-#include "machine.h"
 
-int main(int argc, char **argv)
+int main(int argc, char **argv __attribute__((unused)))
 {
     if (argc != 2)
     {

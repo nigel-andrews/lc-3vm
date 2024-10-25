@@ -40,11 +40,10 @@ static inline void register_set(uint16_t registers[], enum reg_t reg,
     registers[reg] = value;
 }
 
-static inline void register_get(uint16_t registers[], enum reg_t reg,
-                                uint16_t value)
+static inline uint16_t register_get(uint16_t registers[], enum reg_t reg)
 {
     assert(reg < REGISTER_COUNT && reg >= 0);
-    registers[reg] = value;
+    return registers[reg];
 }
 
 #endif /* ! REGISTERS_H */

@@ -44,7 +44,7 @@ void run(void *program)
             errx(INVALID_OPCODE,
                  "Invalid instruction encountered, code is %d\n", opcode);
 
-        operations[opcode](registers, R0, R1);
+        operations[opcode](registers, instruction);
 
         break;
     }

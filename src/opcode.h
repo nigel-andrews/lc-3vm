@@ -3,8 +3,6 @@
 
 #include <stdint.h>
 
-#include "registers.h"
-
 enum opcode_t
 {
     OP_BR = 0,
@@ -27,9 +25,8 @@ enum opcode_t
     OP_COUNT
 };
 
-typedef void (*instruction_t)(uint16_t registers[], enum reg_t operand_a,
-                              enum reg_t operand_b);
+typedef void (*instruction_t)(uint16_t registers[], uint16_t instruction_line);
 
-void op_add(uint16_t registers[], enum reg_t a, enum reg_t b);
+void op_add(uint16_t registers[], uint16_t instruction);
 
 #endif /* !OPCODE_H */

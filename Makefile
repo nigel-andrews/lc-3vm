@@ -11,7 +11,9 @@ BIN = src/vm
 OBJ = src/machine.o     \
       src/opcode.o
 
-TEST_OBJ = tests/unit/test_helpers.o
+TEST_OBJ = tests/unit/test_helpers.o 	\
+	   tests/unit/test_opcode.o
+
 TEST_BIN = tests/test
 
 all: debug
