@@ -23,6 +23,10 @@
 
           # libs
           criterion
+
+          # compiledb
+          bear
+          libstdcxx5
         ];
 
         hardeningDisable = [ "all" ];

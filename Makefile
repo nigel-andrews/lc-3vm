@@ -1,3 +1,7 @@
+include .env
+# In my case, I store my CRITERION_PATH so that the compiledb
+# can find it
+
 CC = gcc
 CFLAGS = -Wall -Wextra -pedantic -std=c99 -Wvla
 CPPFLAGS = -Isrc
@@ -19,6 +23,7 @@ debug: CFLAGS += -g3 -fsanitize=address
 debug: LDFLAGS += -fsanitize=address
 debug: ${BIN}
 
+${TEST_BIN}: CPPFLAGS += -I${CRITERION_PATH}
 ${TEST_BIN}: CFLAGS += -g3 -fsanitize=address
 ${TEST_BIN}: LDFLAGS += -fsanitize=address
 ${TEST_BIN}: LDLIBS += -lcriterion
