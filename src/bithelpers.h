@@ -10,4 +10,10 @@ static inline int test_bit(uint16_t value, int n)
     return (1 << n) & value;
 }
 
+static inline int16_t sext(int value)
+{
+    int sign = ((1u << 4) & value);
+    return ((sign != 0) * ((~sign) ^ 0x1F)) | value;
+}
+
 #endif /* !BITHELPERS_H */

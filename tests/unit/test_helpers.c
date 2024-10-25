@@ -3,6 +3,7 @@
 #include "bithelpers.h"
 
 TestSuite(test_a_bit);
+TestSuite(sext);
 
 Test(test_a_bit, zero_value)
 {
@@ -38,4 +39,47 @@ Test(test_a_bit, misc)
         cr_expect(test_bit(test, i) == 0 || i == 2,
                   "condition == %d and i == %d\n", test_bit(test, i), i);
     }
+}
+
+#define TEST_SEXT(value)                                                       \
+    do                                                                         \
+    {                                                                          \
+        int8_t val = (value);                                                  \
+        cr_expect(val == sext(val), "Expected: %hd, Got: %hd\n", val,          \
+                  sext(val));                                                  \
+    } while (0)
+
+Test(sext, zero)
+{
+    TEST_SEXT(0);
+}
+
+Test(sext, one)
+{
+    TEST_SEXT(1);
+}
+
+Test(sext, neg_one)
+{
+    TEST_SEXT(-1);
+}
+
+Test(sext, simple)
+{
+    TEST_SEXT(8);
+}
+
+Test(sext, simple_neg)
+{
+    TEST_SEXT(-12);
+}
+
+Test(sext, max_val)
+{
+    TEST_SEXT(15);
+}
+
+Test(sext, neg_max)
+{
+    TEST_SEXT(~0 ^ 0xE);
 }
