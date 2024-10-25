@@ -4,8 +4,9 @@ CPPFLAGS = -Isrc
 
 BIN = src/vm
 
-OBJ = ${BIN}.o \
-      src/machine.o
+OBJ = ${BIN}.o          \
+      src/machine.o     \
+      src/opcode.o
 
 all: release
 

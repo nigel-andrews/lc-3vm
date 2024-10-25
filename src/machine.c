@@ -45,6 +45,7 @@ void run(void *program)
                  "Invalid instruction encountered, code is %d\n", opcode);
 
         operations[opcode](registers, R0, R1);
+
         break;
     }
 }
