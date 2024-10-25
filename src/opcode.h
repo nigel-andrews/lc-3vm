@@ -1,6 +1,10 @@
 #ifndef OPCODE_H
 #define OPCODE_H
 
+#include <stdint.h>
+
+#include "registers.h"
+
 enum opcode_t
 {
     OP_BR = 0,
@@ -20,6 +24,12 @@ enum opcode_t
     OP_RES,
     OP_LEA,
     OP_TRAP,
+    OP_COUNT
 };
+
+typedef void (*instruction_t)(uint16_t registers[], enum reg_t operand_a,
+                              enum reg_t operand_b);
+
+void op_add(uint16_t registers[], enum reg_t a, enum reg_t b);
 
 #endif /* !OPCODE_H */

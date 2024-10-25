@@ -1,6 +1,9 @@
 #ifndef REGISTERS_H
 #define REGISTERS_H
 
+#include <assert.h>
+#include <stdint.h>
+
 enum reg_t
 {
     // General purpose registers
@@ -18,9 +21,9 @@ enum reg_t
 
     // Condition flags
     RCOND,
+    REGISTER_COUNT
 };
 
-#define REGISTER_COUNT 10
 #define PC_START 0x3000
 
 enum condition_flags_t
@@ -29,5 +32,19 @@ enum condition_flags_t
     FLAG_Z = 1 << 1,
     FLAG_P = 1 << 2,
 };
+
+static inline void register_set(uint16_t registers[], enum reg_t reg,
+                                uint16_t value)
+{
+    assert(reg < REGISTER_COUNT && reg >= 0);
+    registers[reg] = value;
+}
+
+static inline void register_get(uint16_t registers[], enum reg_t reg,
+                                uint16_t value)
+{
+    assert(reg < REGISTER_COUNT && reg >= 0);
+    registers[reg] = value;
+}
 
 #endif /* ! REGISTERS_H */

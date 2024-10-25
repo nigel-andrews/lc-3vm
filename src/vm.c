@@ -1,9 +1,15 @@
+#include <err.h>
 #include <stdio.h>
 
-#include "mem.h"
+#include "error.h"
+#include "machine.h"
 
-int main(void)
+int main(int argc, char **argv)
 {
-    printf("Max memory of VM == %u\n", MAX_MEM);
+    if (argc != 2)
+    {
+        errx(INVALID_ARG, "Usage: src/vm <executable>\n");
+    }
+
     return 0;
 }
