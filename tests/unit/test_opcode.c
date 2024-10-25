@@ -3,7 +3,7 @@
 #include "opcode.h"
 #include "registers.h"
 
-static uint16_t registers[REGISTER_COUNT];
+static int16_t registers[REGISTER_COUNT];
 
 void teardown(void)
 {
@@ -27,7 +27,27 @@ Test(opcodes, op_add_sr2, .fini = teardown)
 
 Test(opcodes, op_add_imm5, .fini = teardown)
 {
-    // uint16_t instruction_line = (1 << 12) | (R0 << 9) | (R1 << 6) | (1 << 5)
-    // | (R2);
-    cr_expect(false, "Not implemented yet");
+    registers[R1] = 1;
+
+    // NOTE: Should look like:
+    // 0001 000 001 1 00110
+    uint16_t instruction_line =
+        (1 << 12) | (R0 << 9) | (R1 << 6) | (1 << 5) | 6;
+    op_add(registers, instruction_line);
+
+    cr_expect(registers[R0] == 7, "Expected: %d, Got: %d\n", 7, registers[R0]);
+}
+
+Test(opcodes, op_add_imm5_negative, .fini = teardown)
+{
+    registers[R1] = 1;
+
+    // NOTE: Should look like:
+    // 0001 000 001 1 10110
+    uint16_t instruction_line =
+        (1 << 12) | (R0 << 9) | (R1 << 6) | (1 << 5) | (-6 & 0x1F);
+    op_add(registers, instruction_line);
+
+    cr_expect(registers[R0] == -5, "Expected: %d, Got: %d\n", -5,
+              registers[R0]);
 }
