@@ -23,6 +23,7 @@ Test(op_add, sr2, .fini = teardown)
     op_add(registers, instruction_line);
 
     cr_expect(registers[R0] == 3, "Expected: %d, Got: %d\n", 3, registers[R0]);
+    cr_expect(registers[RCOND] == FLAG_P, "Conditions flag is not positive");
 }
 
 Test(op_add, imm5, .fini = teardown)
@@ -36,6 +37,7 @@ Test(op_add, imm5, .fini = teardown)
     op_add(registers, instruction_line);
 
     cr_expect(registers[R0] == 7, "Expected: %d, Got: %d\n", 7, registers[R0]);
+    cr_expect(registers[RCOND] == FLAG_P, "Conditions flag is not positive");
 }
 
 Test(op_add, imm5_negative, .fini = teardown)
@@ -50,6 +52,7 @@ Test(op_add, imm5_negative, .fini = teardown)
 
     cr_expect(registers[R0] == -5, "Expected: %d, Got: %d\n", -5,
               registers[R0]);
+    cr_expect(registers[RCOND] == FLAG_N, "Conditions flag is not negative");
 }
 
 TestSuite(op_and);
@@ -63,6 +66,7 @@ Test(op_and, zero)
 
     cr_expect(registers[R0] == (0 & 0), "Expected: %d, Got: %d\n", -5,
               registers[R0]);
+    cr_expect(registers[RCOND] == FLAG_Z, "Conditions flag is not positive");
 }
 
 Test(op_and, same)
@@ -74,6 +78,7 @@ Test(op_and, same)
 
     cr_expect(registers[R0] == (3 & 3), "Expected: %d, Got: %d\n", -5,
               registers[R0]);
+    cr_expect(registers[RCOND] == FLAG_P, "Conditions flag is not positive");
 }
 
 Test(op_and, diff)
@@ -86,4 +91,5 @@ Test(op_and, diff)
 
     cr_expect(registers[R0] == (3 & 5), "Expected: %d, Got: %d\n", -5,
               registers[R0]);
+    cr_expect(registers[RCOND] == FLAG_P, "Conditions flag is not positive");
 }
