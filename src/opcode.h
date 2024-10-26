@@ -28,5 +28,6 @@ enum opcode_t
 typedef void (*instruction_t)(int16_t registers[], uint16_t instruction_line);
 
 void op_add(int16_t registers[], uint16_t instruction);
+void op_and(int16_t registers[], uint16_t instruction);
 
 #endif /* !OPCODE_H */

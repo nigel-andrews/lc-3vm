@@ -3,6 +3,11 @@
 #include "bithelpers.h"
 #include "registers.h"
 
+#define GET_SR1(instruction_line) ((instruction_line >> 6) & 0x7)
+#define GET_SR2(instruction_line) (instruction_line & 0x7)
+#define GET_IMM5(instruction_line) (instruction_line & 0x1F)
+#define GET_DR(instruction_line) (instruction_line >> 9) & 0x7
+
 static void update_condition_flags(int16_t registers[],
                                    enum reg_t modified_register)
 {
@@ -21,18 +26,31 @@ void op_add(int16_t registers[], uint16_t instruction_line)
     int16_t rhs = -1;
 
     if (test_bit(instruction_line, 5) != 0)
-    {
-        rhs = sext(instruction_line & 0x1F);
-    }
+        rhs = sext(GET_IMM5(instruction_line));
     else
-    {
-        rhs = register_get(registers, instruction_line & 0x7);
-    }
+        rhs = register_get(registers, GET_SR2(instruction_line));
 
-    int16_t result =
-        register_get(registers, (instruction_line >> 6) & 0x7) + rhs;
+    int16_t result = register_get(registers, GET_SR1(instruction_line)) + rhs;
 
-    enum reg_t dr = (instruction_line >> 9) & 0x7;
+    enum reg_t dr = GET_DR(instruction_line);
+
+    register_set(registers, dr, result);
+    update_condition_flags(registers, dr);
+}
+
+void op_and(int16_t registers[], uint16_t instruction_line)
+{
+    int16_t rhs = -1;
+
+    if (test_bit(instruction_line, 5) != 0)
+        rhs = sext(GET_IMM5(instruction_line));
+    else
+        rhs = register_get(registers, GET_SR2(instruction_line));
+
+    int16_t result = register_get(registers, GET_SR1(instruction_line)) & rhs;
+
+    enum reg_t dr = GET_DR(instruction_line);
+
     register_set(registers, dr, result);
     update_condition_flags(registers, dr);
 }

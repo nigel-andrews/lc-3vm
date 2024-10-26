@@ -12,6 +12,7 @@ static int16_t registers[REGISTER_COUNT];
 
 static instruction_t operations[OP_COUNT] = {
     [OP_ADD] = op_add,
+    [OP_AND] = op_and,
 };
 
 static inline int get_op_code(uint16_t instruction)
@@ -40,7 +41,7 @@ void run(void *program)
 
         unsigned int opcode = get_op_code(instruction);
 
-        if (opcode > OP_COUNT)
+        if (opcode >= OP_COUNT)
             errx(INVALID_OPCODE,
                  "Invalid instruction encountered, code is %d\n", opcode);
 
