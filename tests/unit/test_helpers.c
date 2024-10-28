@@ -3,7 +3,6 @@
 #include "bithelpers.h"
 
 TestSuite(test_a_bit);
-TestSuite(sext);
 
 Test(test_a_bit, zero_value)
 {
@@ -40,6 +39,8 @@ Test(test_a_bit, misc)
                   "condition == %d and i == %d\n", test_bit(test, i), i);
     }
 }
+
+TestSuite(sext);
 
 #define TEST_SEXT(value, N)                                                    \
     do                                                                         \

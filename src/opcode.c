@@ -161,3 +161,12 @@ void op_str(uint16_t registers[], uint16_t instruction)
                      + sext(instruction & 0x3F, 6),
                  register_get(registers, GET_DR(instruction)));
 }
+
+void op_trap(uint16_t registers[], uint16_t instruction)
+{
+    assert((instruction & (0xF << 8)) == 0);
+
+    uint8_t trapvect8 = instruction & 0xFF;
+    register_set(registers, R7, register_get(registers, RPC));
+    register_set(registers, RPC, read_memory((int16_t)trapvect8));
+}
