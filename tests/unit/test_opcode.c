@@ -377,3 +377,24 @@ Test(op_st, increment_pc)
               "Stored value is incorrect, expected 42, got %d\n",
               read_memory(0x14));
 }
+
+TestSuite(op_sti);
+
+Test(op_sti, basic)
+{
+    registers[R0] = 2024;
+    write_memory(0xF, 0xA410);
+    uint16_t instruction_line = OP_STI << 12 | R0 << 9 | 0xF;
+    op_sti(registers, instruction_line);
+    cr_expect(read_memory(0xA410) == 2024);
+}
+
+Test(op_sti, increment_pc)
+{
+    registers[RPC] = 1;
+    registers[R0] = 2024;
+    write_memory(0xF, 0xA410);
+    uint16_t instruction_line = OP_STI << 12 | R0 << 9 | 0xE;
+    op_sti(registers, instruction_line);
+    cr_expect(read_memory(0xA410) == 2024);
+}
