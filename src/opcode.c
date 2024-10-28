@@ -102,3 +102,13 @@ void op_ldi(uint16_t registers[], uint16_t instruction)
     register_set(registers, dr, read_memory(read_memory(address)));
     update_condition_flags(registers, dr);
 }
+
+void op_ldr(uint16_t registers[], uint16_t instruction)
+{
+    int dr = GET_DR(instruction);
+    int br = GET_SR1(instruction);
+    int16_t offset = sext(instruction & 0x3F, 6);
+
+    register_set(registers, dr,
+                 read_memory(register_get(registers, br) + offset));
+}

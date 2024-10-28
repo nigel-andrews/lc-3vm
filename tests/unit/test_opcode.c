@@ -263,6 +263,23 @@ Test(op_ldi, basic)
     op_ldi(registers, instruction_line);
 
     cr_expect(registers[R0] == 42,
-              "Loaded memory value is wrong, expected 42000, found %d\n",
+              "Loaded memory value is wrong, expected 42, found %d\n",
+              registers[R0]);
+}
+
+TestSuite(op_ldr);
+
+Test(op_ldr, basic)
+{
+    registers[RPC] = 0x1;
+    registers[R1] = 12;
+
+    uint16_t instruction_line = OP_LDR << 12 | R0 << 9 | R1 << 6 | 4;
+    write_memory(0x10, 2024);
+
+    op_ldr(registers, instruction_line);
+
+    cr_expect(registers[R0] == 2024,
+              "Loaded memory value is wrong, expected 2024, found %d\n",
               registers[R0]);
 }
