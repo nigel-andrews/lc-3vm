@@ -9,6 +9,7 @@ CPPFLAGS = -Isrc
 BIN = src/vm
 
 OBJ = src/machine.o     \
+      src/memory.o 	\
       src/opcode.o
 
 TEST_OBJ = tests/unit/test_helpers.o 	\
