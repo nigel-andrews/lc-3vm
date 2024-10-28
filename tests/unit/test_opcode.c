@@ -19,7 +19,7 @@ Test(op_add, sr2, .fini = teardown)
 
     // NOTE: Should look like:
     // 0001 000 001 0 00 010
-    uint16_t instruction_line = (1 << 12) | (R0 << 9) | (R1 << 6) | (R2);
+    uint16_t instruction_line = (OP_ADD << 12) | (R0 << 9) | (R1 << 6) | (R2);
     op_add(registers, instruction_line);
 
     cr_expect(registers[R0] == 3, "Expected: %d, Got: %d\n", 3, registers[R0]);
@@ -33,7 +33,7 @@ Test(op_add, imm5, .fini = teardown)
     // NOTE: Should look like:
     // 0001 000 001 1 00110
     uint16_t instruction_line =
-        (1 << 12) | (R0 << 9) | (R1 << 6) | (1 << 5) | 6;
+        (OP_ADD << 12) | (R0 << 9) | (R1 << 6) | (1 << 5) | 6;
     op_add(registers, instruction_line);
 
     cr_expect(registers[R0] == 7, "Expected: %d, Got: %d\n", 7, registers[R0]);
@@ -47,7 +47,7 @@ Test(op_add, imm5_negative, .fini = teardown)
     // NOTE: Should look like:
     // 0001 000 001 1 10110
     uint16_t instruction_line =
-        (1 << 12) | (R0 << 9) | (R1 << 6) | (1 << 5) | (-6 & 0x1F);
+        (OP_ADD << 12) | (R0 << 9) | (R1 << 6) | (1 << 5) | (-6 & 0x1F);
     op_add(registers, instruction_line);
 
     cr_expect(registers[R0] == -5, "Expected: %d, Got: %d\n", -5,
@@ -61,7 +61,8 @@ Test(op_and, zero)
 {
     registers[R1] = 0;
 
-    uint16_t instruction_line = (5 << 12) | (R0 << 9) | (R1 << 6) | (1 << 5);
+    uint16_t instruction_line =
+        (OP_AND << 12) | (R0 << 9) | (R1 << 6) | (1 << 5);
     op_and(registers, instruction_line);
 
     cr_expect(registers[R0] == 0, "Expected: %d, Got: %d\n", 0, registers[R0]);
@@ -72,7 +73,7 @@ Test(op_and, same)
 {
     registers[R1] = 3;
 
-    uint16_t instruction_line = (5 << 12) | (R0 << 9) | (R1 << 6) | R1;
+    uint16_t instruction_line = (OP_AND << 12) | (R0 << 9) | (R1 << 6) | R1;
     op_and(registers, instruction_line);
 
     cr_expect(registers[R0] == (3 & 3), "Expected: %d, Got: %d\n", (3 & 3),
@@ -174,7 +175,7 @@ Test(op_jmp, jmp_start)
     registers[RPC] = 0x3500;
 
     // NOTE: 1100 000 010 000000
-    uint16_t instruction_line = (0xC << 12) | (R2 << 6);
+    uint16_t instruction_line = (OP_JMP << 12) | (R2 << 6);
 
     op_jmp(registers, instruction_line);
 
@@ -189,11 +190,45 @@ Test(op_jmp, jmp_ret)
     registers[RPC] = 0x3500;
 
     // NOTE: 1100 111 000 000000
-    uint16_t instruction_line = (0xC << 12) | (7 << 6);
+    uint16_t instruction_line = (OP_JMP << 12) | (7 << 6);
 
     op_jmp(registers, instruction_line);
 
     cr_expect(registers[RPC] == registers[R7],
               "Program counter is not at expected value %d, it is at %d\n",
               registers[R7], registers[RPC]);
+}
+
+TestSuite(op_jsr);
+
+Test(op_jsr, jsr)
+{
+    registers[RPC] = 0xF;
+    int sr_address = 0x3FE;
+    uint16_t instruction_line = (OP_JSR << 12) | 1 << 11 | sr_address;
+    op_jsr(registers, instruction_line);
+
+    cr_expect(
+        registers[R7] == 0xF,
+        "Old program counter not saved correctly in R7, expected %d, got %d\n",
+        0xF, registers[R7]);
+    cr_expect(registers[RPC] == sr_address,
+              "Program counter is not at expected value %d, it is at %d\n",
+              sr_address, registers[RPC]);
+}
+
+Test(op_jsr, jsrr)
+{
+    registers[RPC] = 0xF;
+    registers[R2] = 0x3000;
+    uint16_t instruction_line = (OP_JSR << 12) | (R2 << 6);
+    op_jsr(registers, instruction_line);
+
+    cr_expect(
+        registers[R7] == 0xF,
+        "Old program counter not saved correctly in R7, expected %d, got %d\n",
+        0xF, registers[R7]);
+    cr_expect(registers[RPC] == 0x3000,
+              "Program counter is not at expected value %d, it is at %d\n",
+              registers[R2], registers[RPC]);
 }

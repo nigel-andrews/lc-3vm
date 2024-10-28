@@ -15,15 +15,10 @@ int main(int argc __attribute__((unused)), char **argv __attribute__((unused)))
     //     errx(INVALID_ARG, "Usage: src/vm <executable>\n");
     // }
 
-    registers[R1] = 1;
+    uint16_t instruction_line = (OP_JSR << 12) | 1 << 11 | 0x3000;
+    registers[RPC] = 0xF;
 
-    // NOTE: Should look like:
-    // 0001 000 001 1 10110
-    uint16_t instruction_line =
-        (1 << 12) | (R0 << 9) | (R1 << 6) | (1 << 5) | (-6 & 0x1F);
-    op_add(registers, instruction_line);
-
-    printf("%d\n", registers[R0]);
+    op_jsr(registers, instruction_line);
 
     return 0;
 }

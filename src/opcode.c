@@ -7,6 +7,8 @@
 #define GET_SR2(instruction) (instruction & 0x7)
 #define GET_IMM5(instruction) (instruction & 0x1F)
 #define GET_DR(instruction) (instruction >> 9) & 0x7
+#define GET_PCOFFSET9(instruction) (instruction & 0x1FF)
+#define GET_PCOFFSET11(instruction) (instruction & 0x7FF)
 
 static void update_condition_flags(int16_t registers[],
                                    enum reg_t modified_register)
@@ -61,7 +63,7 @@ void op_br(int16_t registers[], uint16_t instruction)
 
     if (conditions & registers[RCOND])
     {
-        registers[RPC] += sext(instruction & 0x1FF, 9);
+        registers[RPC] += sext(GET_PCOFFSET9(instruction), 9);
     }
 }
 
@@ -69,4 +71,17 @@ void op_jmp(int16_t registers[], uint16_t instruction)
 {
     int br = (instruction & 0x1C0) >> 6;
     registers[RPC] = registers[R7 < br ? R7 : br];
+}
+
+void op_jsr(int16_t registers[], uint16_t instruction)
+{
+    registers[R7] = registers[RPC];
+
+    int16_t address = -1;
+    if (test_bit(instruction, 11))
+        address = sext(GET_PCOFFSET11(instruction), 11);
+    else
+        address = registers[GET_SR1(instruction)];
+
+    registers[RPC] = address;
 }
