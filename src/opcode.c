@@ -122,3 +122,13 @@ void op_lea(uint16_t registers[], uint16_t instruction)
                      + sext(GET_PCOFFSET9(instruction), 9));
     update_condition_flags(registers, dr);
 }
+
+void op_not(uint16_t registers[], uint16_t instruction)
+{
+    assert(((instruction & 0x3F) ^ 0x3F) == 0);
+    int dr = GET_DR(instruction);
+    int sr = GET_SR1(instruction);
+
+    register_set(registers, dr, ~register_get(registers, sr));
+    update_condition_flags(registers, dr);
+}

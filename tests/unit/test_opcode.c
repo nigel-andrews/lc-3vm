@@ -308,3 +308,45 @@ Test(op_lea, basic)
     cr_expect(registers[RCOND] == FLAG_P,
               "Condition flags wrongly set, should be positive\n");
 }
+
+TestSuite(op_not);
+
+Test(op_not, zero)
+{
+    registers[R1] = 0;
+    uint16_t instruction_line = OP_NOT << 12 | R0 << 9 | R1 << 6 | 0x3F;
+
+    op_not(registers, instruction_line);
+    cr_expect((int16_t)registers[R0] == ~0);
+    cr_expect(registers[RCOND] == FLAG_N);
+}
+
+Test(op_not, one)
+{
+    registers[R1] = 1;
+    uint16_t instruction_line = OP_NOT << 12 | R0 << 9 | R1 << 6 | 0x3F;
+
+    op_not(registers, instruction_line);
+    cr_expect((int16_t)registers[R0] == ~1);
+    cr_expect(registers[RCOND] == FLAG_N);
+}
+
+Test(op_not, simple)
+{
+    registers[R1] = 42;
+    uint16_t instruction_line = OP_NOT << 12 | R0 << 9 | R1 << 6 | 0x3F;
+
+    op_not(registers, instruction_line);
+    cr_expect((int16_t)registers[R0] == ~42);
+    cr_expect(registers[RCOND] == FLAG_N);
+}
+
+Test(op_not, negative_one)
+{
+    registers[R1] = -1;
+    uint16_t instruction_line = OP_NOT << 12 | R0 << 9 | R1 << 6 | 0x3F;
+
+    op_not(registers, instruction_line);
+    cr_expect((int16_t)registers[R0] == ~(-1));
+    cr_expect(registers[RCOND] == FLAG_Z);
+}
