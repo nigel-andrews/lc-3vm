@@ -11,7 +11,7 @@
 #define GET_PCOFFSET9(instruction) (instruction & 0x1FF)
 #define GET_PCOFFSET11(instruction) (instruction & 0x7FF)
 
-static void update_condition_flags(int16_t registers[],
+static void update_condition_flags(uint16_t registers[],
                                    enum reg_t modified_register)
 {
     int16_t result = registers[modified_register];
@@ -24,7 +24,7 @@ static void update_condition_flags(int16_t registers[],
         register_set(registers, RCOND, FLAG_Z);
 }
 
-void op_add(int16_t registers[], uint16_t instruction)
+void op_add(uint16_t registers[], uint16_t instruction)
 {
     int16_t rhs = -1;
 
@@ -41,7 +41,7 @@ void op_add(int16_t registers[], uint16_t instruction)
     update_condition_flags(registers, dr);
 }
 
-void op_and(int16_t registers[], uint16_t instruction)
+void op_and(uint16_t registers[], uint16_t instruction)
 {
     int16_t rhs = -1;
 
@@ -58,7 +58,7 @@ void op_and(int16_t registers[], uint16_t instruction)
     update_condition_flags(registers, dr);
 }
 
-void op_br(int16_t registers[], uint16_t instruction)
+void op_br(uint16_t registers[], uint16_t instruction)
 {
     int conditions = (instruction & 0x700) >> 9;
 
@@ -68,13 +68,13 @@ void op_br(int16_t registers[], uint16_t instruction)
     }
 }
 
-void op_jmp(int16_t registers[], uint16_t instruction)
+void op_jmp(uint16_t registers[], uint16_t instruction)
 {
     int br = (instruction & 0x1C0) >> 6;
     register_set(registers, RPC, register_get(registers, R7 < br ? R7 : br));
 }
 
-void op_jsr(int16_t registers[], uint16_t instruction)
+void op_jsr(uint16_t registers[], uint16_t instruction)
 {
     registers[R7] = register_get(registers, RPC);
 
@@ -87,17 +87,17 @@ void op_jsr(int16_t registers[], uint16_t instruction)
     register_set(registers, RPC, address);
 }
 
-void op_ld(int16_t registers[], uint16_t instruction)
+void op_ld(uint16_t registers[], uint16_t instruction)
 {
-    int16_t dr = GET_DR(instruction);
+    int dr = GET_DR(instruction);
     int16_t address = registers[RPC] + sext(GET_PCOFFSET9(instruction), 9);
     register_set(registers, dr, read_memory(address));
     update_condition_flags(registers, dr);
 }
 
-void op_ldi(int16_t registers[], uint16_t instruction)
+void op_ldi(uint16_t registers[], uint16_t instruction)
 {
-    int16_t dr = GET_DR(instruction);
+    int dr = GET_DR(instruction);
     int16_t address = registers[RPC] + sext(GET_PCOFFSET9(instruction), 9);
     register_set(registers, dr, read_memory(read_memory(address)));
     update_condition_flags(registers, dr);

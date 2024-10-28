@@ -25,14 +25,15 @@ enum opcode_t
     OP_COUNT
 };
 
-typedef void (*instruction_t)(int16_t registers[], uint16_t instruction_line);
+typedef void (*instruction_t)(uint16_t registers[], uint16_t instruction_line);
 
-void op_add(int16_t registers[], uint16_t instruction);
-void op_and(int16_t registers[], uint16_t instruction);
-void op_br(int16_t registers[], uint16_t instruction);
-void op_jmp(int16_t registers[], uint16_t instruction);
-void op_jsr(int16_t registers[], uint16_t instruction);
-void op_ld(int16_t registers[], uint16_t instruction);
-void op_ldi(int16_t registers[], uint16_t instruction);
+void op_add(uint16_t registers[], uint16_t instruction);
+void op_and(uint16_t registers[], uint16_t instruction);
+void op_br(uint16_t registers[], uint16_t instruction);
+void op_jmp(uint16_t registers[], uint16_t instruction);
+void op_jsr(uint16_t registers[], uint16_t instruction);
+void op_ld(uint16_t registers[], uint16_t instruction);
+void op_ldi(uint16_t registers[], uint16_t instruction);
+void op_ldr(uint16_t registers[], uint16_t instruction);
 
 #endif /* !OPCODE_H */

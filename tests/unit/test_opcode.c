@@ -4,7 +4,7 @@
 #include "opcode.h"
 #include "registers.h"
 
-static int16_t registers[REGISTER_COUNT];
+static uint16_t registers[REGISTER_COUNT];
 
 void teardown(void)
 {
@@ -52,7 +52,7 @@ Test(op_add, imm5_negative, .fini = teardown)
         (OP_ADD << 12) | (R0 << 9) | (R1 << 6) | (1 << 5) | (-6 & 0x1F);
     op_add(registers, instruction_line);
 
-    cr_expect(registers[R0] == -5, "Expected: %d, Got: %d\n", -5,
+    cr_expect((int16_t)registers[R0] == -5, "Expected: %d, Got: %d\n", -5,
               registers[R0]);
     cr_expect(registers[RCOND] == FLAG_N, "Conditions flag is not negative");
 }
@@ -256,13 +256,13 @@ Test(op_ldi, basic)
 {
     registers[RPC] = 0x1;
 
-    uint16_t instruction_line = OP_LD << 12 | R0 << 9 | 0xF;
+    uint16_t instruction_line = OP_LDI << 12 | R0 << 9 | 0xF;
     write_memory(0x10, 0xA410);
     write_memory(0xA410, 42);
 
     op_ldi(registers, instruction_line);
 
     cr_expect(registers[R0] == 42,
-              "Loaded memory value is wrong, expected 42, found %d\n",
+              "Loaded memory value is wrong, expected 42000, found %d\n",
               registers[R0]);
 }

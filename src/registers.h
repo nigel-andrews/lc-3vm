@@ -33,14 +33,14 @@ enum condition_flags_t
     FLAG_N = 1 << 2,
 };
 
-static inline void register_set(int16_t registers[], enum reg_t reg,
+static inline void register_set(uint16_t registers[], enum reg_t reg,
                                 uint16_t value)
 {
     assert(reg < REGISTER_COUNT && reg >= 0);
     registers[reg] = value;
 }
 
-static inline uint16_t register_get(int16_t registers[], enum reg_t reg)
+static inline uint16_t register_get(uint16_t registers[], enum reg_t reg)
 {
     assert(reg < REGISTER_COUNT && reg >= 0);
     return registers[reg];

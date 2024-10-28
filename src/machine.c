@@ -8,7 +8,7 @@
 #include "opcode.h"
 #include "registers.h"
 
-static int16_t registers[REGISTER_COUNT];
+static uint16_t registers[REGISTER_COUNT];
 
 static instruction_t operations[OP_COUNT] = {
     [OP_ADD] = op_add,
