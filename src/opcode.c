@@ -86,3 +86,19 @@ void op_jsr(int16_t registers[], uint16_t instruction)
 
     register_set(registers, RPC, address);
 }
+
+void op_ld(int16_t registers[], uint16_t instruction)
+{
+    int16_t dr = GET_DR(instruction);
+    int16_t address = registers[RPC] + sext(GET_PCOFFSET9(instruction), 9);
+    register_set(registers, dr, read_memory(address));
+    update_condition_flags(registers, dr);
+}
+
+void op_ldi(int16_t registers[], uint16_t instruction)
+{
+    int16_t dr = GET_DR(instruction);
+    int16_t address = registers[RPC] + sext(GET_PCOFFSET9(instruction), 9);
+    register_set(registers, dr, read_memory(read_memory(address)));
+    update_condition_flags(registers, dr);
+}

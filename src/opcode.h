@@ -32,5 +32,7 @@ void op_and(int16_t registers[], uint16_t instruction);
 void op_br(int16_t registers[], uint16_t instruction);
 void op_jmp(int16_t registers[], uint16_t instruction);
 void op_jsr(int16_t registers[], uint16_t instruction);
+void op_ld(int16_t registers[], uint16_t instruction);
+void op_ldi(int16_t registers[], uint16_t instruction);
 
 #endif /* !OPCODE_H */

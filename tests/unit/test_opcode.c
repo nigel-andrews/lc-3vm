@@ -1,5 +1,6 @@
 #include <criterion/criterion.h>
 
+#include "memory.h"
 #include "opcode.h"
 #include "registers.h"
 
@@ -8,6 +9,7 @@ static int16_t registers[REGISTER_COUNT];
 void teardown(void)
 {
     memset(registers, 0, sizeof(registers));
+    reset_memory();
 }
 
 TestSuite(op_add);
@@ -231,4 +233,36 @@ Test(op_jsr, jsrr)
     cr_expect(registers[RPC] == 0x3000,
               "Program counter is not at expected value %d, it is at %d\n",
               registers[R2], registers[RPC]);
+}
+
+TestSuite(op_ld);
+
+Test(op_ld, basic)
+{
+    registers[RPC] = 0x1;
+    // NOTE: 0010 000 000001111
+    uint16_t instruction_line = OP_LD << 12 | R0 << 9 | 0xF;
+    write_memory(0x10, 42);
+    op_ld(registers, instruction_line);
+
+    cr_expect(registers[R0] == 42,
+              "Loaded memory value is wrong, expected 42, found %d\n",
+              registers[R0]);
+}
+
+TestSuite(op_ldi);
+
+Test(op_ldi, basic)
+{
+    registers[RPC] = 0x1;
+
+    uint16_t instruction_line = OP_LD << 12 | R0 << 9 | 0xF;
+    write_memory(0x10, 0xA410);
+    write_memory(0xA410, 42);
+
+    op_ldi(registers, instruction_line);
+
+    cr_expect(registers[R0] == 42,
+              "Loaded memory value is wrong, expected 42, found %d\n",
+              registers[R0]);
 }
