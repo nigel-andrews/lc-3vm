@@ -165,3 +165,35 @@ Test(op_br, branch_neg)
               "PC at %d\n",
               old_counter - 4, registers[RPC]);
 }
+
+TestSuite(op_jmp);
+
+Test(op_jmp, jmp_start)
+{
+    registers[R2] = 0x3000;
+    registers[RPC] = 0x3500;
+
+    // NOTE: 1100 000 010 000000
+    uint16_t instruction_line = (0xC << 12) | (R2 << 6);
+
+    op_jmp(registers, instruction_line);
+
+    cr_expect(registers[RPC] == registers[R2],
+              "Program counter is not at expected value %d, it is at %d\n",
+              registers[R2], registers[RPC]);
+}
+
+Test(op_jmp, jmp_ret)
+{
+    registers[R7] = 0x3000;
+    registers[RPC] = 0x3500;
+
+    // NOTE: 1100 111 000 000000
+    uint16_t instruction_line = (0xC << 12) | (7 << 6);
+
+    op_jmp(registers, instruction_line);
+
+    cr_expect(registers[RPC] == registers[R7],
+              "Program counter is not at expected value %d, it is at %d\n",
+              registers[R7], registers[RPC]);
+}

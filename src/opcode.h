@@ -30,5 +30,6 @@ typedef void (*instruction_t)(int16_t registers[], uint16_t instruction_line);
 void op_add(int16_t registers[], uint16_t instruction);
 void op_and(int16_t registers[], uint16_t instruction);
 void op_br(int16_t registers[], uint16_t instruction);
+void op_jmp(int16_t registers[], uint16_t instruction);
 
 #endif /* !OPCODE_H */
