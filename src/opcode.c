@@ -1,6 +1,7 @@
 #include "opcode.h"
 
 #include "bithelpers.h"
+#include "memory.h"
 #include "registers.h"
 
 #define GET_SR1(instruction) ((instruction >> 6) & 0x7)
