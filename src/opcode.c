@@ -70,18 +70,18 @@ void op_br(int16_t registers[], uint16_t instruction)
 void op_jmp(int16_t registers[], uint16_t instruction)
 {
     int br = (instruction & 0x1C0) >> 6;
-    registers[RPC] = registers[R7 < br ? R7 : br];
+    register_set(registers, RPC, register_get(registers, R7 < br ? R7 : br));
 }
 
 void op_jsr(int16_t registers[], uint16_t instruction)
 {
-    registers[R7] = registers[RPC];
+    registers[R7] = register_get(registers, RPC);
 
     int16_t address = -1;
     if (test_bit(instruction, 11))
         address = sext(GET_PCOFFSET11(instruction), 11);
     else
-        address = registers[GET_SR1(instruction)];
+        address = register_get(registers, GET_SR1(instruction));
 
-    registers[RPC] = address;
+    register_set(registers, RPC, address);
 }
