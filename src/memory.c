@@ -27,3 +27,8 @@ void reset_memory(void)
 {
     memset(memory, 0, sizeof(memory));
 }
+
+uint16_t *get_memory_pointer(uint16_t offset)
+{
+    return memory + offset;
+}

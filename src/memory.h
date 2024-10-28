@@ -9,5 +9,6 @@
 uint16_t read_memory(unsigned int address);
 void write_memory(unsigned int address, uint16_t value);
 void reset_memory(void);
+uint16_t *get_memory_pointer(uint16_t offset);
 
 #endif /* !MEM_H*/

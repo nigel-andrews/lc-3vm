@@ -6,6 +6,7 @@
 
 #include "error.h"
 #include "opcode.h"
+#include "program.h"
 #include "registers.h"
 
 static uint16_t registers[REGISTER_COUNT];
@@ -21,10 +22,14 @@ static inline int get_op_code(uint16_t instruction)
     return instruction >> 12;
 }
 
-static inline int fetch(void *program, int pcounter)
+static inline uint16_t fetch(struct program *program, uint16_t pcounter)
 {
-    // Fetch instruction
-    return 0;
+    if (program->program_size <= pcounter)
+    {
+        errx(MEMORY_VIOLATION, "Program counter is out of bounds\n");
+    }
+
+    return program->memory[pcounter];
 }
 
 void run(void *program)
