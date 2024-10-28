@@ -398,3 +398,23 @@ Test(op_sti, increment_pc)
     op_sti(registers, instruction_line);
     cr_expect(read_memory(0xA410) == 2024);
 }
+
+TestSuite(op_str);
+
+Test(op_str, no_offset)
+{
+    registers[R0] = 42;
+    registers[R1] = 0xF;
+    uint16_t instruction_line = OP_STI << 12 | R0 << 9 | R1 << 6;
+    op_str(registers, instruction_line);
+    cr_expect(read_memory(0xF) == 42);
+}
+
+Test(op_str, base_offset)
+{
+    registers[R0] = 69;
+    registers[R1] = 0xE;
+    uint16_t instruction_line = OP_STI << 12 | R0 << 9 | R1 << 6 | 1;
+    op_str(registers, instruction_line);
+    cr_expect(read_memory(0xF) == 69);
+}

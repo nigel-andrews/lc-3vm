@@ -46,5 +46,6 @@ __attribute((noreturn)) void op_rti(uint16_t registers[], uint16_t instruction);
 
 void op_st(uint16_t registers[], uint16_t instruction);
 void op_sti(uint16_t registers[], uint16_t instruction);
+void op_str(uint16_t registers[], uint16_t instruction);
 
 #endif /* !OPCODE_H */

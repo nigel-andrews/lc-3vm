@@ -154,3 +154,10 @@ void op_sti(uint16_t registers[], uint16_t instruction)
                              + sext(GET_PCOFFSET9(instruction), 9)),
                  register_get(registers, GET_DR(instruction)));
 }
+
+void op_str(uint16_t registers[], uint16_t instruction)
+{
+    write_memory(register_get(registers, GET_SR1(instruction))
+                     + sext(instruction & 0x3F, 6),
+                 register_get(registers, GET_DR(instruction)));
+}
