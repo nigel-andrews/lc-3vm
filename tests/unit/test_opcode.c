@@ -350,3 +350,30 @@ Test(op_not, negative_one)
     cr_expect((int16_t)registers[R0] == ~(-1));
     cr_expect(registers[RCOND] == FLAG_Z);
 }
+
+TestSuite(op_st);
+
+Test(op_st, basic)
+{
+    registers[R0] = 42;
+    uint16_t instruction_line = OP_ST << 12 | R0 << 9 | 0xF;
+
+    op_st(registers, instruction_line);
+
+    cr_expect(read_memory(0xF) == 42,
+              "Stored value is incorrect, expected 42, got %d\n",
+              read_memory(0xF));
+}
+
+Test(op_st, increment_pc)
+{
+    registers[RPC] = 5;
+    registers[R0] = 42;
+    uint16_t instruction_line = OP_ST << 12 | R0 << 9 | 0xF;
+
+    op_st(registers, instruction_line);
+
+    cr_expect(read_memory(0x14) == 42,
+              "Stored value is incorrect, expected 42, got %d\n",
+              read_memory(0x14));
+}

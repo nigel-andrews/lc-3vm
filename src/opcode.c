@@ -1,6 +1,7 @@
 #include "opcode.h"
 
 #include "bithelpers.h"
+#include "error.h"
 #include "memory.h"
 #include "registers.h"
 
@@ -131,4 +132,18 @@ void op_not(uint16_t registers[], uint16_t instruction)
 
     register_set(registers, dr, ~register_get(registers, sr));
     update_condition_flags(registers, dr);
+}
+
+__attribute((noreturn)) void op_rti(uint16_t registers[] __attribute((unused)),
+                                    uint16_t instruction __attribute((unused)))
+{
+    errx(INVALID_OPCODE,
+         "Return from interrupt is not supported in this project");
+}
+
+void op_st(uint16_t registers[], uint16_t instruction)
+{
+    write_memory(register_get(registers, RPC)
+                     + sext(GET_PCOFFSET9(instruction), 9),
+                 register_get(registers, GET_DR(instruction)));
 }
