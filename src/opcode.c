@@ -26,7 +26,7 @@ void op_add(int16_t registers[], uint16_t instruction_line)
     int16_t rhs = -1;
 
     if (test_bit(instruction_line, 5) != 0)
-        rhs = sext(GET_IMM5(instruction_line));
+        rhs = sext(GET_IMM5(instruction_line), 5);
     else
         rhs = register_get(registers, GET_SR2(instruction_line));
 
@@ -43,7 +43,7 @@ void op_and(int16_t registers[], uint16_t instruction_line)
     int16_t rhs = -1;
 
     if (test_bit(instruction_line, 5) != 0)
-        rhs = sext(GET_IMM5(instruction_line));
+        rhs = sext(GET_IMM5(instruction_line), 5);
     else
         rhs = register_get(registers, GET_SR2(instruction_line));
 
@@ -53,4 +53,14 @@ void op_and(int16_t registers[], uint16_t instruction_line)
 
     register_set(registers, dr, result);
     update_condition_flags(registers, dr);
+}
+
+void op_br(int16_t registers[], uint16_t instruction_line)
+{
+    int conditions = (instruction_line & 0x700) >> 9;
+
+    if (conditions & registers[RCOND])
+    {
+        registers[RPC] += sext(instruction_line & 0x1FF, 9);
+    }
 }

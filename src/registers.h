@@ -28,9 +28,9 @@ enum reg_t
 
 enum condition_flags_t
 {
-    FLAG_N = 1 << 0,
+    FLAG_P = 1 << 0,
     FLAG_Z = 1 << 1,
-    FLAG_P = 1 << 2,
+    FLAG_N = 1 << 2,
 };
 
 static inline void register_set(int16_t registers[], enum reg_t reg,

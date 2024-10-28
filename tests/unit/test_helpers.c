@@ -41,45 +41,45 @@ Test(test_a_bit, misc)
     }
 }
 
-#define TEST_SEXT(value)                                                       \
+#define TEST_SEXT(value, N)                                                    \
     do                                                                         \
     {                                                                          \
         int8_t val = (value);                                                  \
-        cr_expect(val == sext(val), "Expected: %hd, Got: %hd\n", val,          \
-                  sext(val));                                                  \
+        cr_expect(val == sext(val, (N)), "Expected: %hd, Got: %hd\n", val,     \
+                  sext(val, (N)));                                             \
     } while (0)
 
 Test(sext, zero)
 {
-    TEST_SEXT(0);
+    TEST_SEXT(0, 3);
 }
 
 Test(sext, one)
 {
-    TEST_SEXT(1);
+    TEST_SEXT(1, 5);
 }
 
 Test(sext, neg_one)
 {
-    TEST_SEXT(-1);
+    TEST_SEXT(-1, 5);
 }
 
 Test(sext, simple)
 {
-    TEST_SEXT(8);
+    TEST_SEXT(8, 9);
 }
 
 Test(sext, simple_neg)
 {
-    TEST_SEXT(-12);
+    TEST_SEXT(-12, 8);
 }
 
 Test(sext, max_val)
 {
-    TEST_SEXT(15);
+    TEST_SEXT(15, 9);
 }
 
 Test(sext, neg_max)
 {
-    TEST_SEXT(~0 ^ 0xE);
+    TEST_SEXT(~0 ^ 0xE, 5);
 }

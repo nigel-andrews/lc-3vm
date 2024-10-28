@@ -13,6 +13,7 @@ static int16_t registers[REGISTER_COUNT];
 static instruction_t operations[OP_COUNT] = {
     [OP_ADD] = op_add,
     [OP_AND] = op_and,
+    [OP_BR] = op_br,
 };
 
 static inline int get_op_code(uint16_t instruction)
