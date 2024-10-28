@@ -248,6 +248,8 @@ Test(op_ld, basic)
     cr_expect(registers[R0] == 42,
               "Loaded memory value is wrong, expected 42, found %d\n",
               registers[R0]);
+    cr_expect(registers[RCOND] == FLAG_P,
+              "Condition flags wrongly set, should be positive\n");
 }
 
 TestSuite(op_ldi);
@@ -265,6 +267,8 @@ Test(op_ldi, basic)
     cr_expect(registers[R0] == 42,
               "Loaded memory value is wrong, expected 42, found %d\n",
               registers[R0]);
+    cr_expect(registers[RCOND] == FLAG_P,
+              "Condition flags wrongly set, should be positive\n");
 }
 
 TestSuite(op_ldr);
@@ -282,4 +286,25 @@ Test(op_ldr, basic)
     cr_expect(registers[R0] == 2024,
               "Loaded memory value is wrong, expected 2024, found %d\n",
               registers[R0]);
+    cr_expect(registers[RCOND] == FLAG_P,
+              "Condition flags wrongly set, should be positive\n");
+}
+
+TestSuite(op_lea);
+
+Test(op_lea, basic)
+{
+    registers[RPC] = 1;
+    uint16_t instruction_line = OP_LEA << 12 | R0 << 9 | 0xF;
+
+    op_lea(registers, instruction_line);
+
+    write_memory(0x10, '!');
+
+    cr_expect(read_memory(registers[R0]) == '!',
+              "Wrong address loaded, expected %d, got %d\n", 0x10,
+              registers[R0]);
+
+    cr_expect(registers[RCOND] == FLAG_P,
+              "Condition flags wrongly set, should be positive\n");
 }

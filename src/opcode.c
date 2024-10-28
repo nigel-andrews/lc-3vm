@@ -111,4 +111,14 @@ void op_ldr(uint16_t registers[], uint16_t instruction)
 
     register_set(registers, dr,
                  read_memory(register_get(registers, br) + offset));
+    update_condition_flags(registers, dr);
+}
+
+void op_lea(uint16_t registers[], uint16_t instruction)
+{
+    int dr = GET_DR(instruction);
+    register_set(registers, dr,
+                 register_get(registers, RPC)
+                     + sext(GET_PCOFFSET9(instruction), 9));
+    update_condition_flags(registers, dr);
 }
