@@ -13,6 +13,7 @@ OBJ = src/machine.o     \
       src/program.o 	\
       src/trap.o 	\
       src/registers.o   \
+      src/syscalls.o   \
       src/opcode.o
 
 TEST_OBJ = tests/unit/test_helpers.o 	\

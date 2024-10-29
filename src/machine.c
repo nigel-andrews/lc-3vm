@@ -9,6 +9,7 @@
 #include "opcode.h"
 #include "program.h"
 #include "registers.h"
+#include "syscalls.h"
 
 static instruction_t operations[OP_COUNT] = {
     [OP_ADD] = op_add,
