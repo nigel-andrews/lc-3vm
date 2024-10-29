@@ -6,11 +6,12 @@
 
 struct program
 {
+    int run;
     uint16_t starting_address;
     size_t program_size;
-    uint16_t *memory;
 };
 
 struct program *load_program(const char *path);
+void halt_program(void);
 
 #endif /* !PROGRAM_H */

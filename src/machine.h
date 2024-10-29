@@ -1,6 +1,9 @@
 #ifndef MACHINE_H
 #define MACHINE_H
 
-void run(void *program);
+#include "program.h"
+
+struct machine *get_machine(void);
+void execute(struct program *program);
 
 #endif /* !MACHINE_H */

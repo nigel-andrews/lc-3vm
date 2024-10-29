@@ -5,11 +5,10 @@
 #include <stdint.h>
 
 #include "error.h"
+#include "memory.h"
 #include "opcode.h"
 #include "program.h"
 #include "registers.h"
-
-static uint16_t registers[REGISTER_COUNT];
 
 static instruction_t operations[OP_COUNT] = {
     [OP_ADD] = op_add,
@@ -22,28 +21,39 @@ static inline int get_op_code(uint16_t instruction)
     return instruction >> 12;
 }
 
-static inline uint16_t fetch(struct program *program, uint16_t pcounter)
+static inline uint16_t fetch(struct program *program)
 {
-    if (program->program_size <= pcounter)
+    uint16_t address = register_get(RPC);
+
+    if (program->program_size <= address)
     {
         errx(MEMORY_VIOLATION, "Program counter is out of bounds\n");
     }
 
-    return program->memory[pcounter];
+    register_incr(RPC);
+
+    return read_memory(address);
 }
 
-void run(void *program)
+void execute(struct program *program)
 {
-    int run = 1;
-
-    registers[RCOND] = 0;
-    registers[RPC] = PC_START;
+    register_set(RCOND, 0);
+    register_set(RPC, program->starting_address);
 
     static uint16_t instruction;
 
-    while (run)
+    program->run = 1;
+
+    while (program->run)
     {
-        instruction = fetch(program, registers[RPC]++);
+        // Address points to a system call
+        // if (register_get(RPC) < 0xFF)
+        // {
+        //     call();
+        //     continue;
+        // }
+        // else
+        instruction = fetch(program);
 
         unsigned int opcode = get_op_code(instruction);
 
@@ -51,7 +61,7 @@ void run(void *program)
             errx(INVALID_OPCODE,
                  "Invalid instruction encountered, code is %d\n", opcode);
 
-        operations[opcode](registers, instruction);
+        operations[opcode](instruction);
 
         break;
     }

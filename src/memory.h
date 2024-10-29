@@ -1,6 +1,7 @@
 #ifndef MEM_H
 #define MEM_H
 
+#include <stddef.h>
 #include <stdint.h>
 
 // LC-3 has 16-bit addressable memory

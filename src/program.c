@@ -21,21 +21,24 @@ struct program *load_program(const char *path)
 
     fread(&program.starting_address, sizeof(uint16_t), 1, file);
 
-    program.memory = get_memory_pointer(program.starting_address);
+    uint16_t *program_start = get_memory_pointer(program.starting_address);
 
     size_t address_space = MAX_MEM - program.starting_address;
 
     program.program_size =
-        fread(program.memory, sizeof(uint16_t), address_space, file);
+        fread(program_start, sizeof(uint16_t), address_space, file);
 
 #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
     for (size_t i = 0; i < program.program_size; ++i)
-    {
-        program.memory[i] = swap_bytes(program.memory[i]);
-    }
+        program_start[i] = swap_bytes(program_start[i]);
 #endif
 
     fclose(file);
 
     return &program;
+}
+
+void halt_program(void)
+{
+    program.run = 0;
 }

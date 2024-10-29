@@ -1,7 +1,7 @@
 #include <err.h>
 
 #include "error.h"
-#include "program.h"
+#include "machine.h"
 
 int main(int argc, char **argv)
 {
@@ -11,6 +11,7 @@ int main(int argc, char **argv)
     }
 
     struct program *program = load_program(argv[1]);
+    execute(program);
 
     return 0;
 }

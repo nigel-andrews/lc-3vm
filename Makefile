@@ -10,6 +10,9 @@ BIN = src/vm
 
 OBJ = src/machine.o     \
       src/memory.o 	\
+      src/program.o 	\
+      src/trap.o 	\
+      src/registers.o   \
       src/opcode.o
 
 TEST_OBJ = tests/unit/test_helpers.o 	\
@@ -39,6 +42,6 @@ check: ${TEST_BIN}
 	./${TEST_BIN}
 
 clean:
-	${RM} ${BIN} ${OBJ} ${TEST_OBJ} ${TEST_BIN}
+	${RM} ${BIN} ${OBJ} ${TEST_OBJ} ${TEST_BIN} ${BIN}.o
 
 .PHONY: all release debug clean check
