@@ -17,7 +17,7 @@ struct program *load_program(const char *path)
     FILE *file = fopen(path, "r");
 
     if (!file)
-        errx(INVALID_ARG, "Can't open file %s\n", path);
+        errx(INVALID_ARG, "Can't open file %s", path);
 
     fread(&program.starting_address, sizeof(uint16_t), 1, file);
 

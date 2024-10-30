@@ -46,7 +46,7 @@ static inline void sys_putsp(void)
     {
         putchar(*str & 0xFF);
 
-        char byte = *(str++) & 0xFF00;
+        char byte = (*(str++) & 0xFF00) >> 8;
         if (byte & 0xFF00)
             putchar(byte);
     }

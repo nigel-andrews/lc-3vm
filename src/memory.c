@@ -1,9 +1,11 @@
 #include "memory.h"
 
 #include <err.h>
+#include <stdio.h>
 #include <string.h>
 
 #include "error.h"
+#include "io.h"
 
 static uint16_t memory[MAX_MEM];
 
@@ -11,6 +13,18 @@ uint16_t read_memory(unsigned int address)
 {
     if (MAX_MEM <= address)
         errx(MEMORY_VIOLATION, "Address %u falls out of bounds", address);
+
+    if (address == KBSR)
+    {
+        // FIXME: This should be handled in another thread probably
+        if (check_key())
+        {
+            memory[KBSR] = 1 << 15;
+            memory[KBDR] = getchar();
+        }
+        else
+            memory[KBSR] = 0;
+    }
 
     return memory[address];
 }

@@ -6,9 +6,7 @@
 int main(int argc, char **argv)
 {
     if (argc != 2)
-    {
-        errx(INVALID_ARG, "Usage: src/vm <executable>\n");
-    }
+        errx(INVALID_ARG, "Usage: src/vm <executable>");
 
     struct program *program = load_program(argv[1]);
     execute(program);

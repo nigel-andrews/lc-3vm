@@ -5,6 +5,7 @@
 #include <stdint.h>
 
 #include "error.h"
+#include "io.h"
 #include "memory.h"
 #include "opcode.h"
 #include "program.h"
@@ -27,9 +28,7 @@ static inline uint16_t fetch(struct program *program)
     uint16_t address = register_get(RPC);
 
     if (program->program_size <= address)
-    {
-        errx(MEMORY_VIOLATION, "Program counter is out of bounds\n");
-    }
+        errx(MEMORY_VIOLATION, "Program counter is out of bounds");
 
     register_incr(RPC);
 
@@ -38,6 +37,7 @@ static inline uint16_t fetch(struct program *program)
 
 void execute(struct program *program)
 {
+    io_setup();
     register_set(RCOND, 0);
     register_set(RPC, program->starting_address);
 
@@ -48,22 +48,22 @@ void execute(struct program *program)
     while (program->run)
     {
         // Address points to a system call
-        // if (register_get(RPC) < 0xFF)
-        // {
-        //     call();
-        //     continue;
-        // }
-        // else
-        instruction = fetch(program);
+        if (register_get(RPC) < 0xFF)
+        {
+            call();
+            continue;
+        }
+        else
+            instruction = fetch(program);
 
         unsigned int opcode = get_op_code(instruction);
 
         if (opcode >= OP_COUNT)
-            errx(INVALID_OPCODE,
-                 "Invalid instruction encountered, code is %d\n", opcode);
+            errx(INVALID_OPCODE, "Invalid instruction encountered, code is %d",
+                 opcode);
 
         operations[opcode](instruction);
-
-        break;
     }
+
+    io_restore();
 }

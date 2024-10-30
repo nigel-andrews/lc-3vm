@@ -11,9 +11,9 @@ BIN = src/vm
 OBJ = src/machine.o     \
       src/memory.o 	\
       src/program.o 	\
-      src/trap.o 	\
       src/registers.o   \
-      src/syscalls.o   \
+      src/syscalls.o    \
+      src/io.o          \
       src/opcode.o
 
 TEST_OBJ = tests/unit/test_helpers.o 	\
