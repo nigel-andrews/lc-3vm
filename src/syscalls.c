@@ -6,9 +6,7 @@
 #include "program.h"
 #include "registers.h"
 
-// NOTE: I/O will be tested functionnally
-
-// TODO: Device register assignements
+// I/O will be tested functionnally
 
 static inline void sys_getc(void)
 {
@@ -66,6 +64,8 @@ static const syscall_t syscall_table[] = {
 
 void call(void)
 {
-    syscall_table[read_memory(register_get(RPC))]();
+    // Syscalls reside in memory but for simplicity's sake it will reside
+    // in the program's memory instead of the emulator's
+    syscall_table[register_get(RPC)]();
     register_set(RPC, register_get(R7));
 }

@@ -12,24 +12,20 @@
 #include "registers.h"
 #include "syscalls.h"
 
-static instruction_t operations[OP_COUNT] = {
-    [OP_ADD] = op_add,
-    [OP_AND] = op_and,
-    [OP_BR] = op_br,
-};
+#define GEN_TABLE(OPCODE) [OP_##OPCODE] = op_##OPCODE,
+
+static instruction_t operations[OP_COUNT] = { XOPCODE(GEN_TABLE) };
+
+#undef GEN_TABLE
 
 static inline int get_op_code(uint16_t instruction)
 {
     return instruction >> 12;
 }
 
-static inline uint16_t fetch(struct program *program)
+static inline uint16_t fetch(void)
 {
     uint16_t address = register_get(RPC);
-
-    if (program->program_size <= address)
-        errx(MEMORY_VIOLATION, "Program counter is out of bounds");
-
     register_incr(RPC);
 
     return read_memory(address);
@@ -54,7 +50,7 @@ void execute(struct program *program)
             continue;
         }
         else
-            instruction = fetch(program);
+            instruction = fetch();
 
         unsigned int opcode = get_op_code(instruction);
 

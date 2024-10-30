@@ -20,6 +20,7 @@ struct program *load_program(const char *path)
         errx(INVALID_ARG, "Can't open file %s", path);
 
     fread(&program.starting_address, sizeof(uint16_t), 1, file);
+    program.starting_address = swap_bytes(program.starting_address);
 
     uint16_t *program_start = get_memory_pointer(program.starting_address);
 
