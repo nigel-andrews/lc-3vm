@@ -13,6 +13,7 @@
 static inline void sys_getc(void)
 {
     register_set(R0, (uint16_t)getchar());
+    update_condition_flags(R0);
 }
 
 static inline void sys_out(void)
@@ -36,6 +37,7 @@ static inline void sys_in(void)
     printf("Enter one character > ");
     sys_getc();
     sys_out();
+    update_condition_flags(R0);
 }
 
 static inline void sys_putsp(void)
