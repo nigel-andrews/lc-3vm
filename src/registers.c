@@ -2,6 +2,8 @@
 
 #include <string.h>
 
+#include "bithelpers.h"
+
 static uint16_t registers[REGISTER_COUNT];
 
 void register_set(enum reg_t reg, uint16_t value)
@@ -18,14 +20,14 @@ uint16_t register_get(enum reg_t reg)
 
 void update_condition_flags(enum reg_t modified_register)
 {
-    int16_t result = registers[modified_register];
+    uint16_t result = registers[modified_register];
 
-    if (result < 0)
+    if (test_bit(result, 15))
         register_set(RCOND, FLAG_N);
-    else if (result > 0)
-        register_set(RCOND, FLAG_P);
-    else
+    else if (result == 0)
         register_set(RCOND, FLAG_Z);
+    else
+        register_set(RCOND, FLAG_P);
 }
 
 void register_incr(enum reg_t reg)

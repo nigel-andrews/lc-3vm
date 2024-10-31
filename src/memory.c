@@ -20,7 +20,7 @@ uint16_t read_memory(unsigned int address)
         if (check_key())
         {
             memory[KBSR] = 1 << 15;
-            memory[KBDR] = getchar();
+            memory[KBDR] = (uint16_t)getchar();
         }
         else
             memory[KBSR] = 0;

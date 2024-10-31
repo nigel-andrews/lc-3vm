@@ -69,8 +69,7 @@ void op_BR(uint16_t instruction)
 
 void op_JMP(uint16_t instruction)
 {
-    int br = (instruction & 0x1C0) >> 6;
-    register_set(RPC, register_get(R7 < br ? R7 : br));
+    register_set(RPC, register_get((instruction & 0x1C0) >> 6));
 }
 
 void op_JSR(uint16_t instruction)
@@ -157,8 +156,6 @@ void op_STR(uint16_t instruction)
 
 void op_TRAP(uint16_t instruction)
 {
-    assert((instruction & (0xF << 8)) == 0);
-
     uint8_t trapvect8 = instruction & 0xFF;
     register_set(R7, register_get(RPC));
     register_set(RPC, (int16_t)trapvect8);

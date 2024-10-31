@@ -1,7 +1,9 @@
 #include "syscalls.h"
 
+#include <err.h>
 #include <stdio.h>
 
+#include "error.h"
 #include "memory.h"
 #include "program.h"
 #include "registers.h"
@@ -55,6 +57,7 @@ static inline void sys_putsp(void)
 static inline void sys_halt(void)
 {
     halt_program();
+    puts("\nHALT triggered");
 }
 
 static const syscall_t syscall_table[] = {
@@ -66,6 +69,11 @@ void call(void)
 {
     // Syscalls reside in memory but for simplicity's sake it will reside
     // in the program's memory instead of the emulator's
-    syscall_table[register_get(RPC)]();
+    uint16_t program_counter = register_get(RPC);
+    if (program_counter < SYS_GETC || program_counter >= SYS_COUNT)
+        errx(INVALID_OPCODE,
+             "Demanded syscall is out of bounds of the syscall_table");
+
+    syscall_table[program_counter]();
     register_set(RPC, register_get(R7));
 }
