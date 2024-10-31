@@ -79,7 +79,7 @@ void op_JSR(uint16_t instruction)
 
     int16_t address = -1;
     if (test_bit(instruction, 11))
-        address = sext(GET_PCOFFSET11(instruction), 11);
+        address = register_get(RPC) + sext(GET_PCOFFSET11(instruction), 11);
     else
         address = register_get(GET_SR1(instruction));
 
