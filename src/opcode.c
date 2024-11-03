@@ -61,7 +61,7 @@ void op_AND(uint16_t instruction)
 
 void op_BR(uint16_t instruction)
 {
-    int conditions = (instruction & 0x700) >> 9;
+    int conditions = (instruction & 0xE00) >> 9;
 
     if (conditions & register_get(RCOND))
         register_add(RPC, sext(GET_PCOFFSET9(instruction), 9));
