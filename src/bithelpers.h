@@ -15,10 +15,10 @@ static inline int test_bit(uint16_t value, int n)
 static inline int16_t sext(int value, int n)
 {
     assert(n < 16 && n >= 0);
-    uint16_t sign = ((1u << (n - 1)) & value);
-    uint16_t mask = ~0x1F;
+    uint16_t sign = test_bit(value, n - 1);
+    uint16_t mask = 0xFFFF << n;
 
-    return (sign != 0) * (mask) | value;
+    return ((sign != 0) * (mask)) | value;
 }
 
 #endif /* !BITHELPERS_H */

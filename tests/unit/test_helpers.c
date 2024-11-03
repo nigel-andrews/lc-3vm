@@ -45,7 +45,7 @@ TestSuite(sext);
 #define TEST_SEXT(value, N)                                                    \
     do                                                                         \
     {                                                                          \
-        int8_t val = (value);                                                  \
+        int16_t val = (value);                                                 \
         cr_expect(val == sext(val, (N)), "Expected: %hd, Got: %hd\n", val,     \
                   sext(val, (N)));                                             \
     } while (0)
@@ -83,4 +83,21 @@ Test(sext, max_val)
 Test(sext, neg_max)
 {
     TEST_SEXT(~0 ^ 0xE, 5);
+}
+
+Test(sext, rogue_bug)
+{
+    uint16_t val = 380;
+    uint16_t expected = 65404;
+    uint16_t result = sext(val, 9);
+    cr_expect(result == expected, "Expected: %hu, Got: %hu\n", expected,
+              result);
+}
+
+Test(sext, rogue_bug2)
+{
+    uint16_t val = 31;
+    uint16_t expected = 65535;
+    uint16_t result = sext(val, 5);
+    cr_expect(result == expected, "Expected: %u, Got: %u\n", expected, result);
 }
