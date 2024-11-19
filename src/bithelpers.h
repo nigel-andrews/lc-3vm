@@ -7,8 +7,6 @@
 static inline int test_bit(uint16_t value, int n)
 {
     assert(n < 16 && n >= 0);
-    // FIXME: Can be reduced to one instruction with
-    // return value >> n;
     return (1 << n) & value;
 }
 
